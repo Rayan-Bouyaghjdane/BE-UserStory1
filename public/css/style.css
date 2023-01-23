@@ -1,0 +1,21 @@
+h3 {
+  /* border: 2px solid red; */
+}
+
+body {
+    font-family: Verdana , sans-serif;
+}
+
+#test {
+  display: none;
+}
+
+.errorForm {
+    color: red;
+    font-size: 0.7em;
+}
+
+.topicError {
+    color: red;
+    font-size: 0.7em;
+}
