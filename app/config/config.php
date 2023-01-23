@@ -4,7 +4,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'be-toets');
+define('DB_NAME', 'be-userstory1');
 
 
 // Het pad naar de app map
