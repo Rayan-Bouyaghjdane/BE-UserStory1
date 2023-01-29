@@ -23,7 +23,7 @@ class Rijscholen extends Controller
       $rows .= "<td>" . $instructeur->Mobiel . "</td>";
       $rows .= "<td>" . $instructeur->DatumInDienst . "</td>";
       $rows .= "<td>" . $instructeur->AantalSterren . "</td>";
-      $rows .= "<td><a href='" . URLROOT . "/rijschool/detail'><img src='" . URLROOT . "/img/b_help.png' alt='topic'></a></td>";
+      $rows .= "<td><a href='" . URLROOT . "/rijscholen/detail/$instructeur->Id'><img src='" . URLROOT . "/img/b_help.png' alt='topic'></a></td>";
       $rows .= "</tr>";
     }
 
@@ -35,5 +35,35 @@ class Rijscholen extends Controller
     ];
 
     $this->view('rijschool/index', $data);
+  }
+
+  public function detail($id)
+  {
+    $instructeur = $this->rijschoolModel->getInstructeurById($id);
+    $voertuigen = $this->rijschoolModel->getVehiclesByInstructeurId($id);
+
+    $rows = "";
+    foreach ($voertuigen as $voertuig) {
+      $rows .= "<tr>";
+      $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
+      $rows .= "<td>" . $voertuig->Type . "</td>";
+      $rows .= "<td>" . $voertuig->Kenteken . "</td>";
+      $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
+      $rows .= "<td>" . $voertuig->Brandstof . "</td>";
+      $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
+      $rows .= "<tr>";
+    }
+
+    $data = [
+      'title' => 'Door instructeur gebruikte voertuigen',
+      'voornaam' => $instructeur->Voornaam,
+      'tussenvoegsel' => $instructeur->Tussenvoegsel,
+      'achternaam' => $instructeur->Achternaam,
+      'datumindienst' => $instructeur->DatumInDienst,
+      'aantalsterren' => $instructeur->AantalSterren,
+      'rows' => $rows
+    ];
+
+    $this->view('rijschool/detail', $data);
   }
 }
