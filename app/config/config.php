@@ -11,7 +11,7 @@ define('DB_NAME', 'be-userstory1');
 define('APPROOT', dirname(dirname(__FILE__)));
 
 // De url van de site
-define('URLROOT', 'http://www.mvc-oop-pdo-toets-userstory.com');
+define('URLROOT', 'http://www.userstory1-p3.com');
 
 // Naam van de site
 define('SITENAME', 'mvc-oop-pdo-toets-userstory');
