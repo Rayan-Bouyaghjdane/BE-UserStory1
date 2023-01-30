@@ -43,15 +43,19 @@ class Rijscholen extends Controller
     $voertuigen = $this->rijschoolModel->getVehiclesByInstructeurId($id);
 
     $rows = "";
-    foreach ($voertuigen as $voertuig) {
-      $rows .= "<tr>";
-      $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
-      $rows .= "<td>" . $voertuig->Type . "</td>";
-      $rows .= "<td>" . $voertuig->Kenteken . "</td>";
-      $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
-      $rows .= "<td>" . $voertuig->Brandstof . "</td>";
-      $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
-      $rows .= "<tr>";
+    if (empty($voertuigen)) {
+      $rows = "Op dit moment heeft de instrecteur geen voertuigen in gebruik.";
+    } else {
+      foreach ($voertuigen as $voertuig) {
+        $rows .= "<tr>";
+        $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
+        $rows .= "<td>" . $voertuig->Type . "</td>";
+        $rows .= "<td>" . $voertuig->Kenteken . "</td>";
+        $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
+        $rows .= "<td>" . $voertuig->Brandstof . "</td>";
+        $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
+        $rows .= "<tr>";
+      }
     }
 
     $data = [
@@ -71,7 +75,20 @@ class Rijscholen extends Controller
   public function addVoertuig($id)
   {
     $instructeur = $this->rijschoolModel->getInstructeurById($id);
-    var_dump($instructeur);
+    $voertuigen = $this->rijschoolModel->getVoertuigById($id);
+
+    $rows = "";
+    foreach ($voertuigen as $voertuig) {
+      $rows .= "<tr>";
+      $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
+      $rows .= "<td>" . $voertuig->Type . "</td>";
+      $rows .= "<td>" . $voertuig->Kenteken . "</td>";
+      $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
+      $rows .= "<td>" . $voertuig->Brandstof . "</td>";
+      $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
+      $rows .= "<td><a href='" . URLROOT . "/rijscholen/addVoertuig/$voertuig->Id'><img src='" . URLROOT . "/img/b_index.png' alt='topic'></a></td>";
+      $rows .= "<tr>";
+    }
 
     $data = [
       'title' => 'Alle beschikbare voertuigen',
@@ -80,6 +97,7 @@ class Rijscholen extends Controller
       'achternaam' => $instructeur->Achternaam,
       'datumindienst' => $instructeur->DatumInDienst,
       'aantalsterren' => $instructeur->AantalSterren,
+      'rows' => $rows,
     ];
 
     $this->view('rijschool/addVoertuig', $data);

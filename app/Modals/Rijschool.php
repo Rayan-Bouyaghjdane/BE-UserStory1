@@ -42,4 +42,16 @@ class Rijschool
     $this->db->bind(':id', $id);
     return $this->db->resultSet();
   }
+
+  public function getVoertuigById($id)
+  {
+    $this->db->query("Select *
+                      From voertuig
+                      Inner join typevoertuig
+                      on voertuig.TypeVoertuigId = typevoertuig.Id
+                      Where voertuig.Id not in (select voertuiginstructeur.voertuigId from voertuiginstructeur where voertuiginstructeur.InstructeurId = :id)");
+
+    $this->db->bind(':id', $id);
+    return $this->db->resultSet();
+  }
 }
