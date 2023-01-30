@@ -61,9 +61,27 @@ class Rijscholen extends Controller
       'achternaam' => $instructeur->Achternaam,
       'datumindienst' => $instructeur->DatumInDienst,
       'aantalsterren' => $instructeur->AantalSterren,
+      'InstructeurId' => $instructeur->Id,
       'rows' => $rows
     ];
 
     $this->view('rijschool/detail', $data);
+  }
+
+  public function addVoertuig($id)
+  {
+    $instructeur = $this->rijschoolModel->getInstructeurById($id);
+    var_dump($instructeur);
+
+    $data = [
+      'title' => 'Alle beschikbare voertuigen',
+      'voornaam' => $instructeur->Voornaam,
+      'tussenvoegsel' => $instructeur->Tussenvoegsel,
+      'achternaam' => $instructeur->Achternaam,
+      'datumindienst' => $instructeur->DatumInDienst,
+      'aantalsterren' => $instructeur->AantalSterren,
+    ];
+
+    $this->view('rijschool/addVoertuig', $data);
   }
 }

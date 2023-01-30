@@ -7,8 +7,6 @@
 <h5>Datum in dienst: <?= $data['datumindienst'] ?></h5>
 <h5>Aantal sterren: <?= $data['aantalsterren'] ?></h5><br>
 
-<button><a href='/Rijscholen/addVoertuig/<?= $data['InstructeurId']; ?>'>Toevoegen Voertuig</a></button>
-
 <table border='1'>
   <thead>
     <th>Type voertuig</th>
@@ -17,10 +15,11 @@
     <th>Bouwjaar</th>
     <th>Brandstof</th>
     <th>Rijbewijscategorie</th>
+    <th>Toevoegen</th>
   </thead>
   <tbody>
     <?= $data['rows'] ?>
   </tbody>
 </table>
 
-<?php require(APPROOT . '/views/includes/header.php'); ?>
+<?php require(APPROOT . '/views/includes/footer.php'); ?>
