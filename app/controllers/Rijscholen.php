@@ -72,10 +72,16 @@ class Rijscholen extends Controller
     $this->view('rijschool/detail', $data);
   }
 
-  public function addVoertuig($id)
+  public function addVoertuig($instructeurId, $voertuigId = null)
   {
-    $instructeur = $this->rijschoolModel->getInstructeurById($id);
-    $voertuigen = $this->rijschoolModel->getVoertuigById($id);
+    if (isset($voertuigId)) {
+      $this->rijschoolModel->addVoertuigInstructeur($instructeurId, $voertuigId);
+      header("Location: " . URLROOT . "/rijscholen/detail/$instructeurId");
+      exit;
+    }
+
+    $instructeur = $this->rijschoolModel->getInstructeurById($instructeurId);
+    $voertuigen = $this->rijschoolModel->getVoertuigById($instructeurId);
 
     $rows = "";
     foreach ($voertuigen as $voertuig) {
@@ -86,7 +92,7 @@ class Rijscholen extends Controller
       $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
       $rows .= "<td>" . $voertuig->Brandstof . "</td>";
       $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
-      $rows .= "<td><a href='" . URLROOT . "/rijscholen/addVoertuig/$voertuig->Id'><img src='" . URLROOT . "/img/b_index.png' alt='topic'></a></td>";
+      $rows .= "<td><a href='" . URLROOT . "/rijscholen/addVoertuig/$instructeurId/$voertuig->Id'><img src='" . URLROOT . "/img/b_index.png' alt='topic'></a></td>";
       $rows .= "<tr>";
     }
 
@@ -101,5 +107,10 @@ class Rijscholen extends Controller
     ];
 
     $this->view('rijschool/addVoertuig', $data);
+  }
+
+  public function addVoertuigInstructeur($instructeurId, $voertuigId)
+  {
+    $this->rijschoolModel->addVoertuigInstructeur($instructeurId, $voertuigId);
   }
 }
