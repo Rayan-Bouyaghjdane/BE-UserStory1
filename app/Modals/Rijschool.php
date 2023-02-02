@@ -36,9 +36,30 @@ class Rijschool
                       on voertuiginstructeur.InstructeurId = instructeur.Id
                       Inner join typevoertuig
                       on voertuig.TypeVoertuigId = typevoertuig.Id
-                      Where voertuiginstructeur.InstructeurId = :id");
+                      Where voertuiginstructeur.InstructeurId = :id
+                      Order by typevoertuig.Rijbewijscategorie asc");
 
     $this->db->bind(':id', $id);
     return $this->db->resultSet();
+  }
+
+  public function getVoertuigById($id)
+  {
+    $this->db->query("Select voertuig.Id, voertuig.Kenteken, voertuig.Bouwjaar, voertuig.Brandstof, typevoertuig.TypeVoertuig, voertuig.Type, typevoertuig.Rijbewijscategorie
+                      From voertuig
+                      Inner join typevoertuig
+                      on voertuig.TypeVoertuigId = typevoertuig.Id
+                      Where voertuig.Id not in (select voertuiginstructeur.voertuigId from voertuiginstructeur where voertuiginstructeur.InstructeurId = :id)");
+
+    $this->db->bind(':id', $id);
+    return $this->db->resultSet();
+  }
+
+  public function addVoertuigInstructeur($instructeurId, $voertuigId)
+  {
+    $this->db->query("Insert into voertuiginstructeur (InstructeurId, VoertuigId) values (:instructeurId, :voertuigId)");
+    $this->db->bind(':instructeurId', $instructeurId);
+    $this->db->bind(':voertuigId', $voertuigId);
+    return $this->db->execute();
   }
 }

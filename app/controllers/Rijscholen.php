@@ -43,15 +43,19 @@ class Rijscholen extends Controller
     $voertuigen = $this->rijschoolModel->getVehiclesByInstructeurId($id);
 
     $rows = "";
-    foreach ($voertuigen as $voertuig) {
-      $rows .= "<tr>";
-      $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
-      $rows .= "<td>" . $voertuig->Type . "</td>";
-      $rows .= "<td>" . $voertuig->Kenteken . "</td>";
-      $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
-      $rows .= "<td>" . $voertuig->Brandstof . "</td>";
-      $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
-      $rows .= "<tr>";
+    if (empty($voertuigen)) {
+      $rows = "Op dit moment heeft de instrecteur geen voertuigen in gebruik.";
+    } else {
+      foreach ($voertuigen as $voertuig) {
+        $rows .= "<tr>";
+        $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
+        $rows .= "<td>" . $voertuig->Type . "</td>";
+        $rows .= "<td>" . $voertuig->Kenteken . "</td>";
+        $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
+        $rows .= "<td>" . $voertuig->Brandstof . "</td>";
+        $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
+        $rows .= "<tr>";
+      }
     }
 
     $data = [
@@ -61,9 +65,52 @@ class Rijscholen extends Controller
       'achternaam' => $instructeur->Achternaam,
       'datumindienst' => $instructeur->DatumInDienst,
       'aantalsterren' => $instructeur->AantalSterren,
+      'InstructeurId' => $instructeur->Id,
       'rows' => $rows
     ];
 
     $this->view('rijschool/detail', $data);
+  }
+
+  public function addVoertuig($instructeurId, $voertuigId = null)
+  {
+    if (isset($voertuigId)) {
+      $this->rijschoolModel->addVoertuigInstructeur($instructeurId, $voertuigId);
+      header("Location: " . URLROOT . "/rijscholen/detail/$instructeurId");
+      exit;
+    }
+
+    $instructeur = $this->rijschoolModel->getInstructeurById($instructeurId);
+    $voertuigen = $this->rijschoolModel->getVoertuigById($instructeurId);
+
+    $rows = "";
+    foreach ($voertuigen as $voertuig) {
+      $rows .= "<tr>";
+      $rows .= "<td>" . $voertuig->TypeVoertuig . "</td>";
+      $rows .= "<td>" . $voertuig->Type . "</td>";
+      $rows .= "<td>" . $voertuig->Kenteken . "</td>";
+      $rows .= "<td>" . $voertuig->Bouwjaar . "</td>";
+      $rows .= "<td>" . $voertuig->Brandstof . "</td>";
+      $rows .= "<td>" . $voertuig->Rijbewijscategorie . "</td>";
+      $rows .= "<td><a href='" . URLROOT . "/rijscholen/addVoertuig/$instructeurId/$voertuig->Id'><img src='" . URLROOT . "/img/b_index.png' alt='topic'></a></td>";
+      $rows .= "<tr>";
+    }
+
+    $data = [
+      'title' => 'Alle beschikbare voertuigen',
+      'voornaam' => $instructeur->Voornaam,
+      'tussenvoegsel' => $instructeur->Tussenvoegsel,
+      'achternaam' => $instructeur->Achternaam,
+      'datumindienst' => $instructeur->DatumInDienst,
+      'aantalsterren' => $instructeur->AantalSterren,
+      'rows' => $rows,
+    ];
+
+    $this->view('rijschool/addVoertuig', $data);
+  }
+
+  public function addVoertuigInstructeur($instructeurId, $voertuigId)
+  {
+    $this->rijschoolModel->addVoertuigInstructeur($instructeurId, $voertuigId);
   }
 }
